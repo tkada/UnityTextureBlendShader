@@ -65,13 +65,14 @@
                 fixed4 sub = tex2D(_SubTex, i.uv);
                 fixed4 col = main;
 
-				if(i.uv.x >= _BlendStartU && i.uv.y >= _BlendStartV)
-				{
-					if(i.uv.x <= _BlendEndU && i.uv.y <= _BlendEndV)
-					{
-						col = main * (1-_Blend) + sub * _Blend;
-					}
-				}
+                float condition = step(i.uv.x, _BlendEndU) * 
+                                    step(i.uv.y, _BlendEndV) *
+                                    step(_BlendStartU, i.uv.x) *
+                                    step(_BlendStartV, i.uv.y);
+
+                float blend = condition * _Blend;
+
+                col = main * (1-blend) + sub * blend;
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
