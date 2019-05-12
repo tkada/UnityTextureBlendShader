@@ -63,7 +63,6 @@
                 // sample the texture
                 fixed4 main = tex2D(_MainTex, i.uv);
                 fixed4 sub = tex2D(_SubTex, i.uv);
-                fixed4 col = main;
 
                 float condition = step(i.uv.x, _BlendEndU) * 
                                     step(i.uv.y, _BlendEndV) *
@@ -72,7 +71,7 @@
 
                 float blend = condition * _Blend;
 
-                col = main * (1-blend) + sub * blend;
+                fixed4 col = main * (1-blend) + sub * blend;
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
